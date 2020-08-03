@@ -1,18 +1,18 @@
-# Altrac Frontend Developer Test
+# Altrac Frontend Developer Test - Dean Glueckler
 
-## Dean Glueckler
+## Overview of Solution (Scroll down to see the overview of the challenge)
 
-### (Scroll down to see the overview of the challenge)
+### Screenshots
+
+### Below the chart are three inputs to change the data displayed. Upon changing the inputs the chart will refresh.
 
 ![Screenshot](images/screenshot.png)
 
-Below the chart are three inputs to change the data displayed. Upon changing the inputs the chart will refresh.
+### I also included some basic error handling.
 
 ![Screenshot](images/screenshot-error.png)
 
-I also included some basic error handling.
-
-### Bootstrapping by Create React App
+## Bootstrapping for this project was done with Create React App
 
 In the project directory, you can run:
 
@@ -21,23 +21,13 @@ In the project directory, you can run:
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+See [CRA deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Overview of Challenge
 
@@ -88,34 +78,3 @@ Some extra credit (but please don't spend much time on this):
   - Change from metric to standard units
   - Change the Evapotranspiration coefficient
 - Display chart data in a simple table
-
-## Questions or Issues
-
-If you've run into any issues or have questions, please email support@altrac.io
-
-## Create React App
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
