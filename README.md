@@ -2,6 +2,14 @@
 
 ## Dean Glueckler
 
+### (Scroll down to see the overview of the challenge)
+
+![Screenshot](images/screenshot.png)
+
+Below the chart are three inputs to change the data displayed. Upon changing the inputs the chart will refresh.
+
+I also included some basic error handling.
+
 ## Overview
 
 A small exercise to determine if you have some basic JavaScript, React and data manipulation skills as well as an understanding of how to deploy JS websites.

@@ -2,16 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Chart from './Chart.js';
 import './App.css';
 
-const data27 = {
-  meanDailyAirTemperatureC: 25.06,
-  meanSolarRadiationMJ: 17.14,
-  avgWindSpeedMs: 1.64,
-  atmosphericPressue: 99.41,
-  netRadiation: 4.22,
-  evapotranspirationMM: 4.19,
-  evapotranspirationIN: 0.16,
-};
-
 function App() {
   const [inputs, setInputs] = useState({
     daysSinceToday: 7,
@@ -25,7 +15,7 @@ function App() {
     getDataForDatesSinceToday(
       {
         daysSinceToday: inputs.daysSinceToday,
-        todaysDateObject: inputs.todaysDateObject,
+        todaysDateObject: new Date(inputs.todaysDateObject.getTime()),
         evapoCoeff: inputs.evapoCoeff,
       },
       setChartData,
@@ -38,7 +28,7 @@ function App() {
       <Chart
         chartData={chartData}
         daysSinceToday={inputs.daysSinceToday}
-        todaysDateObject={inputs.todaysDateObject}
+        todaysDateObject={new Date(inputs.todaysDateObject.getTime())}
         units={inputs.units}
       />
       <form>
@@ -60,7 +50,7 @@ function App() {
           </select>
         </div>
         <div>
-          <span style={{ paddingRight: '5px' }}>Select days to display:</span>
+          <span style={{ paddingRight: '5px' }}>Select Units to display:</span>
           <select
             value={inputs.units}
             onChange={(event) =>

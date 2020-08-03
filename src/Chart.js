@@ -41,6 +41,7 @@ function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
         data: evapoUnitCorrection(chartData, units),
         pointStart: todaysDateObject.getTime(),
         pointInterval: 24 * 36e5,
+        type: 'spline',
       },
       {
         name: 'Mean Solar Radiation',
@@ -48,6 +49,7 @@ function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
         data: chartData.map((datas) => datas.meanSolarRadiationMJ),
         pointStart: todaysDateObject.getTime(),
         pointInterval: 24 * 36e5,
+        type: 'spline',
       },
       {
         name: `Air Temperature ${tempUnitString(units)}`,
@@ -55,6 +57,7 @@ function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
         data: tempUnitCorrection(chartData, units),
         pointStart: todaysDateObject.getTime(),
         pointInterval: 24 * 36e5,
+        type: 'spline',
       },
     ],
   };
