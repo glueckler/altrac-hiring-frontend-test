@@ -11,6 +11,7 @@ function App() {
   });
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     getDataForDatesSinceToday(
       {
@@ -82,7 +83,6 @@ function App() {
   );
 }
 
-// get our data
 function getDataPromise({ date, evapoCoeff }) {
   const baseUrl = `https://stage.altrac-api.com/evapo/address/26002e000c51343334363138`;
   const queryString = `?date=${date}&tzOffset=-7&elevation=160.9&latitude=43.2624613&Kc=${evapoCoeff}`;
@@ -118,10 +118,12 @@ function getDataForDatesSinceToday(
       evapoCoeff,
     });
   });
+
   setError(null);
+
   return Promise.all(dataPromises)
     .then((data) => setData(data))
-    .catch((err) =>
+    .catch(() =>
       setError('Something went wrong gathering data.  Check the inputs.')
     );
 }

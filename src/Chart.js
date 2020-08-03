@@ -3,6 +3,11 @@ import Highcharts, { chart } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
+  const seriesDefaults = {
+    pointStart: todaysDateObject.getTime(),
+    pointInterval: 24 * 36e5,
+    type: 'spline',
+  };
   const chartOptions = {
     title: {
       text: `Evapotranspiration (Previous ${daysSinceToday}days)`,
@@ -36,28 +41,22 @@ function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
     },
     series: [
       {
+        ...seriesDefaults,
         name: `Evapotranspiration (${evapoUnitString(units)})`,
         yAxis: 0,
         data: evapoUnitCorrection(chartData, units),
-        pointStart: todaysDateObject.getTime(),
-        pointInterval: 24 * 36e5,
-        type: 'spline',
       },
       {
+        ...seriesDefaults,
         name: 'Mean Solar Radiation',
         yAxis: 1,
         data: chartData.map((datas) => datas.meanSolarRadiationMJ),
-        pointStart: todaysDateObject.getTime(),
-        pointInterval: 24 * 36e5,
-        type: 'spline',
       },
       {
+        ...seriesDefaults,
         name: `Air Temperature ${tempUnitString(units)}`,
         yAxis: 2,
         data: tempUnitCorrection(chartData, units),
-        pointStart: todaysDateObject.getTime(),
-        pointInterval: 24 * 36e5,
-        type: 'spline',
       },
     ],
   };
