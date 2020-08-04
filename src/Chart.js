@@ -4,7 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
   const seriesDefaults = {
-    pointStart: todaysDateObject.getTime(),
+    pointStart: todaysDateObject.getTime() - 24 * 36e5 * daysSinceToday,
     pointInterval: 24 * 36e5,
     type: 'spline',
   };

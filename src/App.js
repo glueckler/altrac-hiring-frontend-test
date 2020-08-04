@@ -16,7 +16,7 @@ function App() {
     getDataForDatesSinceToday(
       {
         daysSinceToday: inputs.daysSinceToday,
-        todaysDateObject: new Date(inputs.todaysDateObject.getTime()),
+        todaysDateObject: cloneDateObject(inputs.todaysDateObject.getTime()),
         evapoCoeff: inputs.evapoCoeff,
       },
       setChartData,
@@ -29,7 +29,7 @@ function App() {
       <Chart
         chartData={chartData}
         daysSinceToday={inputs.daysSinceToday}
-        todaysDateObject={new Date(inputs.todaysDateObject.getTime())}
+        todaysDateObject={cloneDateObject(inputs.todaysDateObject.getTime())}
         units={inputs.units}
       />
       <form>
@@ -83,6 +83,10 @@ function App() {
   );
 }
 
+function cloneDateObject(dateObj) {
+  return new Date(dateObj);
+}
+
 function getDataPromise({ date, evapoCoeff }) {
   const baseUrl = `https://stage.altrac-api.com/evapo/address/26002e000c51343334363138`;
   const queryString = `?date=${date}&tzOffset=-7&elevation=160.9&latitude=43.2624613&Kc=${evapoCoeff}`;
@@ -109,10 +113,9 @@ function getDataForDatesSinceToday(
   const mappableArray = [...Array(daysSinceToday)];
 
   const dataPromises = mappableArray.map((_, index) => {
-    const pastDate = todaysDateObject.setDate(
-      todaysDateObject.getDate() - index
-    );
-    const pastDateString = buildDateString(new Date(pastDate));
+    const tadaysDateClone = cloneDateObject(todaysDateObject);
+    const pastDate = tadaysDateClone.setDate(tadaysDateClone.getDate() - index);
+    const pastDateString = buildDateString(cloneDateObject(pastDate));
     return getDataPromise({
       date: pastDateString,
       evapoCoeff,
@@ -122,7 +125,9 @@ function getDataForDatesSinceToday(
   setError(null);
 
   return Promise.all(dataPromises)
-    .then((data) => setData(data))
+    .then((data) => {
+      setData(data);
+    })
     .catch(() =>
       setError('Something went wrong gathering data.  Check the inputs.')
     );
