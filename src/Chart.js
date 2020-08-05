@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Highcharts, { chart } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
-  const seriesDefaults = {
-    pointStart: todaysDateObject.getTime() - 24 * 36e5 * daysSinceToday,
-    pointInterval: 24 * 36e5,
-    type: 'spline',
-  };
+function Chart({ chartData, daysSinceToday, units }) {
+  const { dates, weatherData } = chartData;
+  const handledChartData = handleData(weatherData, units);
   const chartOptions = {
     title: {
       text: `Evapotranspiration (Previous ${daysSinceToday}days)`,
@@ -32,35 +29,42 @@ function Chart({ chartData, daysSinceToday, todaysDateObject, units }) {
       },
     ],
     xAxis: {
-      type: 'datetime',
+      categories: dates.map((date) => date.toDateString()),
       labels: {
-        format: '{value:%Y-%m-%d}',
         rotation: 45,
-        align: 'left',
       },
     },
     series: [
       {
-        ...seriesDefaults,
+        type: 'spline',
         name: `Evapotranspiration (${evapoUnitString(units)})`,
         yAxis: 0,
-        data: evapoUnitCorrection(chartData, units),
+        data: handledChartData.map((data) => data.handledDataEvapotrans),
       },
       {
-        ...seriesDefaults,
+        type: 'spline',
         name: 'Mean Solar Radiation',
         yAxis: 1,
-        data: chartData.map((datas) => datas.meanSolarRadiationMJ),
+        data: handledChartData.map((data) => data.handledDataMeanSolarRad),
       },
       {
-        ...seriesDefaults,
+        type: 'spline',
         name: `Air Temperature ${tempUnitString(units)}`,
         yAxis: 2,
-        data: tempUnitCorrection(chartData, units),
+        data: handledChartData.map((data) => data.handledDataTemp),
       },
     ],
   };
   return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
+}
+
+function handleData(weatherData, units) {
+  return weatherData.map((data) => ({
+    ...data,
+    handledDataEvapotrans: evapoUnitCorrection(data, units),
+    handledDataMeanSolarRad: data.meanSolarRadiationMJ,
+    handledDataTemp: tempUnitCorrection(data, units),
+  }));
 }
 
 function tempUnitString(units) {
@@ -81,21 +85,19 @@ function evapoUnitString(units) {
 
 function evapoUnitCorrection(data, units) {
   if (units === 'metric') {
-    return data.map((datas) => datas.evapotranspirationMM);
+    return data.evapotranspirationMM;
   }
   if (units === 'standard') {
-    return data.map((datas) => datas.evapotranspirationIN);
+    return data.evapotranspirationIN;
   }
 }
 
 function tempUnitCorrection(data, units) {
   if (units === 'metric') {
-    return data.map((datas) => datas.meanDailyAirTemperatureC);
+    return data.meanDailyAirTemperatureC;
   }
   if (units === 'standard') {
-    return data.map(
-      (datas) => parseInt(datas.meanDailyAirTemperatureC) * (9 / 5) + 32
-    );
+    return parseInt(data.meanDailyAirTemperatureC) * (9 / 5) + 32;
   }
 }
 

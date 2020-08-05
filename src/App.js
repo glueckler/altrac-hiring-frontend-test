@@ -12,11 +12,12 @@ function App() {
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(null);
 
+  const dates = createArrayOfDates(inputs.daysSinceToday);
+
   useEffect(() => {
     getDataForDatesSinceToday(
       {
-        daysSinceToday: inputs.daysSinceToday,
-        todaysDateObject: cloneDateObject(inputs.todaysDateObject.getTime()),
+        dates,
         evapoCoeff: inputs.evapoCoeff,
       },
       setChartData,
@@ -27,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <Chart
-        chartData={chartData}
+        chartData={{ dates, weatherData: chartData }}
         daysSinceToday={inputs.daysSinceToday}
         todaysDateObject={cloneDateObject(inputs.todaysDateObject.getTime())}
         units={inputs.units}
@@ -83,41 +84,29 @@ function App() {
   );
 }
 
+function createArrayOfDates(daysSinceToday) {
+  const todaysDate = new Date();
+  const earliestDate = cloneDateObject(todaysDate).setDate(
+    todaysDate.getDate() - daysSinceToday
+  );
+  for (
+    var arr = [], dateIndex = cloneDateObject(earliestDate);
+    dateIndex < todaysDate;
+    dateIndex.setDate(dateIndex.getDate() + 1)
+  ) {
+    arr.push(new Date(dateIndex));
+  }
+  return arr;
+}
+
 function cloneDateObject(dateObj) {
   return new Date(dateObj);
 }
 
-function getDataPromise({ date, evapoCoeff }) {
-  const baseUrl = `https://stage.altrac-api.com/evapo/address/26002e000c51343334363138`;
-  const queryString = `?date=${date}&tzOffset=-7&elevation=160.9&latitude=43.2624613&Kc=${evapoCoeff}`;
-  const url = `${baseUrl}${queryString}`;
-
-  return fetch(url).then((res) => {
-    if (!res.ok) {
-      throw new Error('Something went wrong.');
-    }
-    return res.json();
-  });
-}
-
-function buildDateString(date) {
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-}
-
-function getDataForDatesSinceToday(
-  { daysSinceToday, todaysDateObject, evapoCoeff },
-  setData,
-  setError
-) {
-  // Create an array full of mappable values the length we need
-  const mappableArray = [...Array(daysSinceToday)];
-
-  const dataPromises = mappableArray.map((_, index) => {
-    const tadaysDateClone = cloneDateObject(todaysDateObject);
-    const pastDate = tadaysDateClone.setDate(tadaysDateClone.getDate() - index);
-    const pastDateString = buildDateString(cloneDateObject(pastDate));
+function getDataForDatesSinceToday({ dates, evapoCoeff }, setData, setError) {
+  const dataPromises = dates.map((date) => {
     return getDataPromise({
-      date: pastDateString,
+      date,
       evapoCoeff,
     });
   });
@@ -131,6 +120,25 @@ function getDataForDatesSinceToday(
     .catch(() =>
       setError('Something went wrong gathering data.  Check the inputs.')
     );
+}
+
+function getDataPromise({ date, evapoCoeff }) {
+  const baseUrl = `https://stage.altrac-api.com/evapo/address/26002e000c51343334363138`;
+  const queryString = `?date=${buildDateString(
+    date
+  )}&tzOffset=-7&elevation=160.9&latitude=43.2624613&Kc=${evapoCoeff}`;
+  const url = `${baseUrl}${queryString}`;
+
+  return fetch(url).then((res) => {
+    if (!res.ok) {
+      throw new Error('Something went wrong.');
+    }
+    return res.json();
+  });
+}
+
+function buildDateString(date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
 export default App;
