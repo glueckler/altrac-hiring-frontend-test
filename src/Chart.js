@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Highcharts, { chart } from 'highcharts';
+import React from 'react';
+import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 function Chart({ chartData, daysSinceToday, units }) {
